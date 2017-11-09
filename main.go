@@ -22,7 +22,7 @@ const (
 	AX=0
 	BX=1
 )
-
+/*
 var code_block = [...]int{MOV, AX, 10,
 						PSH, AX,
 						PSH, AX,
@@ -32,22 +32,26 @@ var code_block = [...]int{MOV, AX, 10,
 						POP,AX,
 						POP,BX,
 						HLT}
+*/
+
+var code_block = [...]int{PSH, 10,
+	PSH, 11,
+	PSH, 12,
+	POP, AX,
+	POP, BX,
+	HLT}
+
+
 var register_ax int;
 var register_bx int;
-var stack_ax[] int;
-var stack_bx[] int;
+var stack[] int;
 var register[] int ;
 
 var end_status= false
 func main() {
 	var code_ptr =0
-	//var inst_code[100] int
-	fmt.Println("Start")
 	for code_ptr < len(code_block) &&  end_status == false{
-		//fmt.Printf("%02d", fetchInstruction(code_block[:], code_ptr))
-
 		var instr = fetchInstruction(code_block[:], code_ptr)
-
 		switch instr {
 		case MOV:
 			code_ptr++
@@ -62,16 +66,19 @@ func main() {
 				register_bx = value
 				break
 			}
-
 		case PSH:
 			code_ptr++
-			var register = fetchInstruction(code_block[:], code_ptr)
-			switch(register){
+			var token = fetchInstruction(code_block[:], code_ptr)
+			switch(token){
 			case AX:
-				stack_ax = append(stack_ax, register_ax)
+				stack= append(stack, register_ax)
 				break
 			case BX:
-				stack_bx = append(stack_bx, register_bx)
+				stack = append(stack, register_bx)
+				break
+			default:
+				//check if value is numeric
+				stack = append(stack, token)
 				break
 			}
 			break
@@ -80,17 +87,17 @@ func main() {
 			code_ptr++
 			var register = fetchInstruction(code_block[:], code_ptr)
 			var popped_val=0
+			popped_val = stack[len(stack)-1]
+			stack=stack[:len(stack)-1]
+
 			switch(register){
 			case AX:
-				popped_val = stack_ax[len(stack_ax)-1]
-				stack_ax=stack_ax[:len(stack_ax)-1]
+				register_ax = popped_val
 				break
 			case BX:
-				popped_val = stack_bx[len(stack_bx)-1]
-				stack_bx=stack_bx[:len(stack_bx)-1]
+				register_bx = popped_val
 				break
 			}
-
 			debugLog("Pop "+strconv.Itoa(popped_val))
 
 			code_ptr++
@@ -103,7 +110,6 @@ func main() {
 			code_ptr++
 		}
 		fmt.Print(" ")
-
 	}
 }
 
@@ -116,4 +122,9 @@ debugging logger
  */
 func debugLog(text string ){
 	fmt.Println(text)
+}
+
+
+func dumpRegister(){
+
 }
