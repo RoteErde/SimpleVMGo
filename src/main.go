@@ -5,12 +5,11 @@ import (
 	"strconv"
 )
 
-
 /*
 MAIN.GO
 Alvin NG
-Stack machine for fun
- */
+Toy VM
+*/
 
 const (
 	PSH = 101
@@ -18,10 +17,11 @@ const (
 	ADD = 103
 	SET = 104
 	MOV = 105
-	HLT	= 99
-	AX=0
-	BX=1
+	HLT = 99
+	AX  = 0
+	BX  = 1
 )
+
 /*
 var code_block = [...]int{MOV, AX, 10,
 						PSH, AX,
@@ -41,16 +41,14 @@ var code_block = [...]int{PSH, 10,
 	POP, BX,
 	HLT}
 
+var stack []int
+var register []int
+var vmRegister Registers
+var end_status = false
 
-var register_ax int;
-var register_bx int;
-var stack[] int;
-var register[] int ;
-
-var end_status= false
 func main() {
-	var code_ptr =0
-	for code_ptr < len(code_block) &&  end_status == false{
+	var code_ptr = 0
+	for code_ptr < len(code_block) && end_status == false {
 		var instr = fetchInstruction(code_block[:], code_ptr)
 		switch instr {
 		case MOV:
@@ -58,23 +56,23 @@ func main() {
 			var register = fetchInstruction(code_block[:], code_ptr)
 			code_ptr++
 			var value = fetchInstruction(code_block[:], code_ptr)
-			switch(register){
+			switch register {
 			case AX:
-				register_ax = value;
+				vmRegister.AX = value
 				break
 			case BX:
-				register_bx = value
+				vmRegister.BX = value
 				break
 			}
 		case PSH:
 			code_ptr++
 			var token = fetchInstruction(code_block[:], code_ptr)
-			switch(token){
+			switch token {
 			case AX:
-				stack= append(stack, register_ax)
+				stack = append(stack, vmRegister.AX)
 				break
 			case BX:
-				stack = append(stack, register_bx)
+				stack = append(stack, vmRegister.BX)
 				break
 			default:
 				//check if value is numeric
@@ -83,22 +81,22 @@ func main() {
 			}
 			break
 		case POP:
-			debugLog(" register len:"+ strconv.Itoa(len(register)))
+			debugLog(" register len:" + strconv.Itoa(len(register)))
 			code_ptr++
 			var register = fetchInstruction(code_block[:], code_ptr)
-			var popped_val=0
-			popped_val = stack[len(stack)-1]
-			stack=stack[:len(stack)-1]
+			var poppedVal = 0
+			poppedVal = stack[len(stack)-1]
+			stack = stack[:len(stack)-1]
 
-			switch(register){
+			switch register {
 			case AX:
-				register_ax = popped_val
+				vmRegister.AX = poppedVal
 				break
 			case BX:
-				register_bx = popped_val
+				vmRegister.BX = poppedVal
 				break
 			}
-			debugLog("Pop "+strconv.Itoa(popped_val))
+			debugLog("Pop " + strconv.Itoa(poppedVal))
 
 			code_ptr++
 			break
@@ -111,20 +109,23 @@ func main() {
 		}
 		fmt.Print(" ")
 	}
+	dumpRegister(vmRegister)
 }
 
-func fetchInstruction(code[] int, ptr int) int{
+func fetchInstruction(code []int, ptr int) int {
 	return code[ptr]
 }
 
 /**
 debugging logger
- */
-func debugLog(text string ){
+*/
+func debugLog(text string) {
 	fmt.Println(text)
 }
 
-
-func dumpRegister(){
+func dumpRegister(registers Registers) {
+	fmt.Println("Registers:")
+	fmt.Println("AX:", vmRegister.AX)
+	fmt.Println("BX", vmRegister.BX)
 
 }
