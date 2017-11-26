@@ -1,5 +1,8 @@
 package main
 
+/**
+Rebooting: Simple instructions for VM
+*/
 const (
 	PSH = 101
 	POP = 102
