@@ -35,7 +35,7 @@ var register []int
 var vmRegister Registers
 var end_status = false
 
-func xmain() {
+func main() {
 	var code_ptr = 0
 	for code_ptr < len(code_block) && end_status == false {
 		var instr = fetchInstruction(code_block[:], code_ptr)
