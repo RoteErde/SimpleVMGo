@@ -11,17 +11,6 @@ Alvin NG
 Toy VM
 */
 
-const (
-	PSH = 101
-	POP = 102
-	ADD = 103
-	SET = 104
-	MOV = 105
-	HLT = 99
-	AX  = 0
-	BX  = 1
-)
-
 /*
 var code_block = [...]int{MOV, AX, 10,
 						PSH, AX,
@@ -46,7 +35,7 @@ var register []int
 var vmRegister Registers
 var end_status = false
 
-func main() {
+func xmain() {
 	var code_ptr = 0
 	for code_ptr < len(code_block) && end_status == false {
 		var instr = fetchInstruction(code_block[:], code_ptr)
@@ -111,7 +100,6 @@ func main() {
 	}
 	dumpRegister(vmRegister)
 }
-
 func fetchInstruction(code []int, ptr int) int {
 	return code[ptr]
 }
