@@ -1,3 +1,5 @@
+** WIP code, not working
+
 Install Go extension from Lukehoban
 
 add this in VS Code preference:

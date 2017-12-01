@@ -40,7 +40,7 @@ func main() {
 	for code_ptr < len(code_block) && end_status == false {
 		var instr = fetchInstruction(code_block[:], code_ptr)
 		switch instr {
-		case MOV:
+		case LOAD:
 			code_ptr++
 			var register = fetchInstruction(code_block[:], code_ptr)
 			code_ptr++
