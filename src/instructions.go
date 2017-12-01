@@ -14,41 +14,43 @@ func makeInstructions() map[int]sub {
 	return mappedFunctions
 }
 
-func popInstr(bin_code []int, registers *Registers) {
-
-}
-
-func movInstr(bin_code []int, registers *Registers) {
+func popInstr(binCode []int, registers *Registers) {
 	registers.IP++
-	var opcode1 = fetchInstruction(bin_code[:], registers.IP)
-	registers.IP++
-	var opcode2 = fetchInstruction(bin_code[:], registers.IP)
-	switch opcode1 {
+	var opcode = fetchInstruction(binCode[:], registers.IP)
+
+	switch opcode {
 	case AX:
+		if registers.SP > 0 {
+			//TODO: handle stack function
+		}
 
 		break
 	case BX:
 		break
-	default:
-		// not an oprand
-		switch opcode2 {
-		case AX:
-			break
-		case BX:
-			break
-		default:
-			//likely opcode to be an error
-			break
+	}
+}
 
-		}
+func loadInstr(binCode []int, registers *Registers) {
+	registers.IP++
+	var opcode1 = fetchInstruction(binCode[:], registers.IP)
+	registers.IP++
+	var opcode2 = fetchInstruction(binCode[:], registers.IP)
+	switch opcode1 {
+	case AX:
+		registers.AX = opcode2
+		break
+	case BX:
+		registers.BX = opcode2
+		break
+	default:
 		break
 	}
 }
 
-func pushInstr(bin_code []int, registers *Registers) {
+func pushInstr(binCode []int, registers *Registers) {
 	//increment code pointer register
 	registers.IP++
-	var token = fetchInstruction(bin_code[:], registers.IP)
+	var token = fetchInstruction(binCode[:], registers.IP)
 	// on successful parsing, add value to the
 	// stack and increment stack pointer register
 	switch token {
