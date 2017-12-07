@@ -10,11 +10,14 @@ aim is to avoid lengthy case statements
 func makeInstructions() map[int]sub {
 	mappedFunctions := map[int]sub{
 		PSH: pushInstr,
+		POP: popInstr,
+		HLT: hltInstr, 
 	}
 	return mappedFunctions
 }
 
 func popInstr(binCode []int, registers *Registers) {
+	log("Popping")
 	registers.IP++
 	var opcode = fetchInstruction(binCode[:], registers.IP)
 
@@ -31,6 +34,7 @@ func popInstr(binCode []int, registers *Registers) {
 }
 
 func loadInstr(binCode []int, registers *Registers) {
+	log("Loading")
 	registers.IP++
 	var opcode1 = fetchInstruction(binCode[:], registers.IP)
 	registers.IP++
@@ -48,6 +52,7 @@ func loadInstr(binCode []int, registers *Registers) {
 }
 
 func pushInstr(binCode []int, registers *Registers) {
+	log("Pushing")
 	//increment code pointer register
 	registers.IP++
 	var token = fetchInstruction(binCode[:], registers.IP)
@@ -74,5 +79,5 @@ func pushInstr(binCode []int, registers *Registers) {
 }
 
 func hltInstr(bin_code []int, registers *Registers) {
-
+	registers.IP = HALTMEM // magic code to signify end of instructions
 }
