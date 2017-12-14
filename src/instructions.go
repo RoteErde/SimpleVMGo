@@ -31,6 +31,7 @@ func popInstr(binCode []int, registers *Registers) {
 	case BX:
 		break
 	}
+	log("Done Popping")
 }
 
 func loadInstr(binCode []int, registers *Registers) {
@@ -51,37 +52,25 @@ func loadInstr(binCode []int, registers *Registers) {
 	}
 }
 
-func pushInstr(binCode []int, registers *Registers) {
+func _pushInstr(binCode []int, registers *Registers) {
 	log("Pushing")
 	//increment code pointer register
 	registers.IP++
 	log("Done Pushing")
 }
 
-func _pushInstr(binCode []int, registers *Registers) {
+func pushInstr(binCode []int, registers *Registers) {
 	log("Pushing")
 	//increment code pointer register
 	registers.IP++
 	var token = fetchInstruction(binCode[:], registers.IP)
+	registers.IP++
 	// on successful parsing, add value to the
 	// stack and increment stack pointer register
-	switch token {
-	case AX:
-		stack = append(stack, registers.AX)
-		registers.SP++
-		break
-	case BX:
-		stack = append(stack, registers.BX)
-		registers.SP++
-		break
-	default:
-		//TODO:check if value is numeric
-		stack = append(stack, token)
-		registers.SP++
 
-		// TODO handle parse failure i.e. non numerical value
-		break
-	}
+	stack = append(stack, token)
+	registers.SP++
+
 	log("Done Pushing")
 
 }
