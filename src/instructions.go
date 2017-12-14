@@ -11,7 +11,7 @@ func makeInstructions() map[int]sub {
 	mappedFunctions := map[int]sub{
 		PSH: pushInstr,
 		POP: popInstr,
-		HLT: hltInstr, 
+		HLT: hltInstr,
 	}
 	return mappedFunctions
 }
@@ -55,6 +55,13 @@ func pushInstr(binCode []int, registers *Registers) {
 	log("Pushing")
 	//increment code pointer register
 	registers.IP++
+	log("Done Pushing")
+}
+
+func _pushInstr(binCode []int, registers *Registers) {
+	log("Pushing")
+	//increment code pointer register
+	registers.IP++
 	var token = fetchInstruction(binCode[:], registers.IP)
 	// on successful parsing, add value to the
 	// stack and increment stack pointer register
@@ -75,6 +82,7 @@ func pushInstr(binCode []int, registers *Registers) {
 		// TODO handle parse failure i.e. non numerical value
 		break
 	}
+	log("Done Pushing")
 
 }
 
