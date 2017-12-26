@@ -20,11 +20,16 @@ func popInstr(binCode []int, registers *Registers) {
 	log("Popping")
 	registers.IP++
 	var opcode = fetchInstruction(binCode[:], registers.IP)
-
+	registers.IP++
 	switch opcode {
 	case AX:
 		if registers.SP > 0 {
 			//TODO: handle stack function
+			registers.AX = stack[len(stack)-1]
+			//delete(stack, stack[len(stack)-1])
+
+		} else {
+			//TODO: handle stack empty exception
 		}
 
 		break
