@@ -55,7 +55,9 @@ func debugLog(text string) {
 
 func dumpRegister(registers Registers) {
 	fmt.Println("Registers:")
-	fmt.Println("AX:", vmRegister.AX)
-	fmt.Println("BX", vmRegister.BX)
+	fmt.Println("AX:", registers.AX)
+	fmt.Println("BX", registers.BX)
+	fmt.Println("IP", registers.IP)
+	fmt.Println("SP", registers.SP)
 
 }

@@ -16,18 +16,20 @@ func makeInstructions() map[int]sub {
 	return mappedFunctions
 }
 
+/**
+handles POP instruction
+If stack is no empty, POPs value into specified register
+*/
 func popInstr(binCode []int, registers *Registers) {
-	log("Popping")
 	registers.IP++
-	var opcode = fetchInstruction(binCode[:], registers.IP)
+	var oprand = fetchInstruction(binCode[:], registers.IP)
 	registers.IP++
-	switch opcode {
+	switch oprand {
 	case AX:
 		if registers.SP > 0 {
 			//TODO: handle stack function
 			registers.AX = registers.stack[len(registers.stack)-1]
 			registers.stack = append(registers.stack[:0], registers.stack[1:]...) //varadic function
-			//delete(registers.stack, registers.stack[len(registers.stack)-1])
 			registers.SP--
 
 		} else {
@@ -38,6 +40,7 @@ func popInstr(binCode []int, registers *Registers) {
 	case BX:
 		if registers.SP > 0 {
 			registers.BX = registers.stack[len(registers.stack)-1]
+			registers.stack = append(registers.stack[:0], registers.stack[1:]...) //varadic function
 		} else {
 			//TODO: handle stck empty exception
 		}
