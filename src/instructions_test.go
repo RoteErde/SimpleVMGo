@@ -6,7 +6,7 @@ import (
 
 func Test_makeInstructions(t *testing.T) {
 
-	t.Run("makeInstructions::Testing if function has PSH instructions",
+	t.Run("makeInstructions::Testing PSH instructions",
 		func(t *testing.T) {
 			var test_code_block = [...]int{PSH, 10,
 				PSH, 11,
@@ -17,12 +17,23 @@ func Test_makeInstructions(t *testing.T) {
 			}
 			var vmTestRegister Registers
 			var mappedFunctions = makeInstructions()
+			var testStack []int
+			var initialStackCount = len(vmTestRegister.stack)
+
 			mappedFunctions[test_code_block[vmTestRegister.IP]](test_code_block[:], &vmTestRegister)
+			t.Log("Testing IP")
 			if vmTestRegister.IP == 2 {
 				t.Log("✓ Success")
 			} else {
 				t.Errorf("Failed, IP incorrect value, Expected vmTestRegister.IP = 2, got %d",
 					vmTestRegister.IP)
+			}
+			t.Log("Testing Stack")
+			var endStackCount = len(vmTestRegister.stack)
+			if endStackCount-initialStackCount == 1 {
+				t.Log("✓ Success")
+			} else {
+				t.Errorf("Failed, stack incorrect length, Expected stack == 2, got %d", len(testStack))
 			}
 			//t.Errorf("PSH not found")
 		})

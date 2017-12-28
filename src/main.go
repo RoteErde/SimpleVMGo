@@ -29,7 +29,7 @@ var code_block = [...]int{PSH, 10,
 	POP, BX,
 	HLT}
 
-var stack []int
+var vmStack []int
 var register []int
 var vmRegister Registers
 var end_status = false

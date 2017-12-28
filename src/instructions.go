@@ -25,8 +25,9 @@ func popInstr(binCode []int, registers *Registers) {
 	case AX:
 		if registers.SP > 0 {
 			//TODO: handle stack function
-			registers.AX = stack[len(stack)-1]
-			//delete(stack, stack[len(stack)-1])
+			registers.AX = registers.stack[len(registers.stack)-1]
+			delete(registers.stack, registers.stack[len(registers.stack)-1])
+			registers.SP--
 
 		} else {
 			//TODO: handle stack empty exception
@@ -34,6 +35,12 @@ func popInstr(binCode []int, registers *Registers) {
 
 		break
 	case BX:
+		if registers.SP > 0 {
+			registers.BX = registers.stack[len(registers.stack)-1]
+		} else {
+			//TODO: handle stck empty exception
+		}
+
 		break
 	}
 	log("Done Popping")
@@ -73,7 +80,7 @@ func pushInstr(binCode []int, registers *Registers) {
 	// on successful parsing, add value to the
 	// stack and increment stack pointer register
 
-	stack = append(stack, token)
+	registers.stack = append(registers.stack, token)
 	registers.SP++
 
 	log("Done Pushing")
