@@ -26,7 +26,8 @@ func popInstr(binCode []int, registers *Registers) {
 		if registers.SP > 0 {
 			//TODO: handle stack function
 			registers.AX = registers.stack[len(registers.stack)-1]
-			delete(registers.stack, registers.stack[len(registers.stack)-1])
+			registers.stack = append(registers.stack[:0], registers.stack[1:]...) //varadic function
+			//delete(registers.stack, registers.stack[len(registers.stack)-1])
 			registers.SP--
 
 		} else {
