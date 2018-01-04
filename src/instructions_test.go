@@ -27,6 +27,52 @@ func Test_popInstr(t *testing.T) {
 		})
 }
 
+func Test_popAXInstr(t *testing.T) {
+	t.Run("makeInstructions::Testing POP AX instructions",
+		func(t *testing.T) {
+			var test_code_block = [...]int{
+				PSH, 11,
+				POP_AX,
+				POP_BX,
+				HLT,
+			}
+			var vmTestRegister Registers
+			var mappedFunctions = makeInstructions()
+			mappedFunctions[test_code_block[vmTestRegister.IP]](test_code_block[:], &vmTestRegister)
+			mappedFunctions[test_code_block[vmTestRegister.IP]](test_code_block[:], &vmTestRegister)
+			dumpRegister(vmTestRegister)
+			t.Log("Check if AX has value of 11")
+			if vmTestRegister.AX == 11 {
+				testLogSuccess(t)
+			} else {
+				t.Errorf("AX wrong value, expect 11, got %d", vmTestRegister.AX)
+			}
+		})
+}
+
+func Test_popBXInstr(t *testing.T) {
+	t.Run("makeInstructions::Testing POP AX instructions",
+		func(t *testing.T) {
+			var test_code_block = [...]int{
+				PSH, 11,
+				POP_BX,
+				POP_AX,
+				HLT,
+			}
+			var vmTestRegister Registers
+			var mappedFunctions = makeInstructions()
+			mappedFunctions[test_code_block[vmTestRegister.IP]](test_code_block[:], &vmTestRegister)
+			mappedFunctions[test_code_block[vmTestRegister.IP]](test_code_block[:], &vmTestRegister)
+			dumpRegister(vmTestRegister)
+			t.Log("Check if BX has value of 11")
+			if vmTestRegister.BX == 11 {
+				testLogSuccess(t)
+			} else {
+				t.Errorf("BX wrong value, expect 11, got %d", vmTestRegister.AX)
+			}
+		})
+}
+
 func Test_loadInstr(t *testing.T) {
 	type args struct {
 		binCode   []int

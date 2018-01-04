@@ -9,27 +9,27 @@ aim is to avoid lengthy case statements
 */
 func makeInstructions() map[int]sub {
 	mappedFunctions := map[int]sub{
-		PSH: pushInstr,
-		POP: popInstr,
-		HLT: hltInstr,
+		PSH:    pushInstr,
+		POP:    popInstr,
+		HLT:    hltInstr,
+		POP_AX: popAXInstr,
+		POP_BX: popBXInstr,
 	}
 	return mappedFunctions
 }
 
-/**
-handles POP instruction
-If stack is no empty, POPs value into specified register
-*/
 func popInstr(binCode []int, registers *Registers) {
+	log("Popping")
 	registers.IP++
-	var oprand = fetchInstruction(binCode[:], registers.IP)
+	var opcode = fetchInstruction(binCode[:], registers.IP)
 	registers.IP++
-	switch oprand {
+	switch opcode {
 	case AX:
 		if registers.SP > 0 {
 			//TODO: handle stack function
 			registers.AX = registers.stack[len(registers.stack)-1]
 			registers.stack = append(registers.stack[:0], registers.stack[1:]...) //varadic function
+			//delete(registers.stack, registers.stack[len(registers.stack)-1])
 			registers.SP--
 
 		} else {
@@ -40,13 +40,50 @@ func popInstr(binCode []int, registers *Registers) {
 	case BX:
 		if registers.SP > 0 {
 			registers.BX = registers.stack[len(registers.stack)-1]
-			registers.stack = append(registers.stack[:0], registers.stack[1:]...) //varadic function
 		} else {
 			//TODO: handle stck empty exception
 		}
 
 		break
 	}
+	log("Done Popping")
+}
+
+func popAXInstr(binCode []int, registers *Registers) {
+	log("Popping")
+	registers.IP++
+	//var opcode = fetchInstruction(binCode[:], registers.IP)
+	registers.IP++
+	if registers.SP > 0 {
+		//TODO: handle stack function
+		registers.AX = registers.stack[len(registers.stack)-1]
+		registers.stack = append(registers.stack[:0], registers.stack[1:]...) //varadic function
+		//delete(registers.stack, registers.stack[len(registers.stack)-1])
+		registers.SP--
+
+	} else {
+		//TODO: handle stack empty exception
+	}
+
+	log("Done Popping")
+}
+
+func popBXInstr(binCode []int, registers *Registers) {
+	log("Popping")
+	registers.IP++
+	//var opcode = fetchInstruction(binCode[:], registers.IP)
+	registers.IP++
+	if registers.SP > 0 {
+		//TODO: handle stack function
+		registers.BX = registers.stack[len(registers.stack)-1]
+		registers.stack = append(registers.stack[:0], registers.stack[1:]...) //varadic function
+		//delete(registers.stack, registers.stack[len(registers.stack)-1])
+		registers.SP--
+
+	} else {
+		//TODO: handle stack empty exception
+	}
+
 	log("Done Popping")
 }
 
